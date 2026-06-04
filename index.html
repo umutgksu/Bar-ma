@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>💙 Private Page</title>
+<title>💙 Private Love Page</title>
 
 <style>
 *{
@@ -23,7 +23,7 @@ body{
   color:white;
 }
 
-/* LOGIN SCREEN */
+/* LOGIN */
 #loginScreen{
   position:absolute;
   width:100%;
@@ -33,7 +33,7 @@ body{
   justify-content:center;
   align-items:center;
   gap:15px;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.7);
   backdrop-filter:blur(10px);
   z-index:999;
 }
@@ -43,9 +43,7 @@ body{
   border-radius:10px;
   border:none;
   outline:none;
-  width:200px;
   text-align:center;
-  font-size:16px;
 }
 
 #loginScreen button{
@@ -86,7 +84,7 @@ body{
   50%{transform:translateY(-40px);}
 }
 
-/* card */
+/* CARD */
 .card{
   position:relative;
   z-index:10;
@@ -100,7 +98,7 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:15px;
+  gap:10px;
 }
 
 .card img{
@@ -125,13 +123,11 @@ button{
   border:none;
   border-radius:12px;
   cursor:pointer;
-  font-size:15px;
+  transition:0.3s;
 }
 
 #yes{background:#22c55e;color:white;}
 #no{background:#ef4444;color:white;}
-
-button:hover{transform:scale(1.05);}
 
 #musicBtn{
   position:absolute;
@@ -151,6 +147,12 @@ canvas{
   pointer-events:none;
 }
 
+#reactionText{
+  font-size:14px;
+  opacity:0.8;
+  min-height:20px;
+}
+
 /* mobile */
 @media(max-width:600px){
   .buttons{flex-direction:column;}
@@ -162,11 +164,10 @@ canvas{
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <h2>🔐 Giriş Yap</h2>
-  <p>Devam etmek için şifreyi gir</p>
+  <h2>🔐 Giriş</h2>
   <input type="password" id="pass" placeholder="Şifre">
   <button onclick="checkPass()">Giriş</button>
-  <p id="error" style="color:red;"></p>
+  <p id="error"></p>
 </div>
 
 <!-- MAIN -->
@@ -178,16 +179,17 @@ canvas{
 
 <canvas id="confetti"></canvas>
 
-<button id="musicBtn">🎵 Müziği Başlat</button>
+<button id="musicBtn">🎵 Müzik</button>
 
 <div class="card">
-  <img src="stitch.png" alt="stitch">
-  <h2>Benimle barışır mısın?Özledim seni 💙</h2>
-  <p>Gerçekten içten bir cevap istiyorum...</p>
+  <img src="stitch.png">
+
+  <h2>Benimle barışır mısın? 💙</h2>
+  <p id="reactionText"></p>
 
   <div class="buttons">
-    <button id="yes">Evet 💙</button>
-    <button id="no">Hayır</button>
+    <button id="yes">Evet 💚</button>
+    <button id="no">Hayır ❌</button>
   </div>
 </div>
 
@@ -197,34 +199,64 @@ canvas{
 
 <script>
 
-/* LOGIN CHECK */
+/* LOGIN */
 function checkPass(){
   const val = document.getElementById("pass").value;
-
-  if(val === "1907"){
+  if(val==="1907"){
     document.getElementById("loginScreen").style.display="none";
     document.getElementById("main").style.display="flex";
   }else{
-    document.getElementById("error").innerText="❌ Hatalı şifre";
+    document.getElementById("error").innerText="Hatalı şifre";
   }
 }
 
 /* MUSIC */
-const music = document.getElementById("music");
 document.getElementById("musicBtn").onclick = () => {
-  music.play();
+  document.getElementById("music").play();
 };
 
-/* YES */
-document.getElementById("yes").onclick = () => {
-  music.play();
+/* NO / YES */
+let noCount = 0;
+
+const texts = [
+  "Lütfen bir daha düşün...",
+  "Gerçekten hayır mı? 😢",
+  "Beni dinler misin?",
+  "İçim kırılıyor...",
+  "Son kez soruyorum..."
+];
+
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const reactionText = document.getElementById("reactionText");
+
+noBtn.onclick = () => {
+
+  reactionText.innerText = texts[noCount % texts.length];
+  noCount++;
+
+  // YES büyür
+  yesBtn.style.transform = `scale(${1 + noCount*0.18})`;
+
+  // NO küçülür
+  noBtn.style.transform = `scale(${1 - noCount*0.15})`;
+
+  // 5. tıkta kaybolur
+  if(noCount >= 5){
+    noBtn.style.display = "none";
+    reactionText.innerText = "💔 Son şans...";
+  }
+};
+
+/* YES FINAL */
+yesBtn.onclick = () => {
+  document.getElementById("music").play();
   startConfetti();
-  alert("💙 Harika!");
-};
 
-/* NO */
-document.getElementById("no").onclick = () => {
-  alert("😢 tekrar düşün");
+  document.querySelector(".card").innerHTML = `
+    <h1>💚 Teşekkür ederim</h1>
+    <p>Bu benim için çok değerli...</p>
+  `;
 };
 
 /* CONFETTI */
@@ -236,13 +268,13 @@ canvas.height = window.innerHeight;
 
 let pieces = [];
 
-for(let i=0;i<180;i++){
+for(let i=0;i<200;i++){
   pieces.push({
-    x: Math.random()*canvas.width,
-    y: Math.random()*canvas.height,
-    r: Math.random()*6+2,
-    d: Math.random()*5+2,
-    color:`hsl(${Math.random()*360},100%,50%)`
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*6+2,
+    d:Math.random()*5+2,
+    c:`hsl(${Math.random()*360},100%,50%)`
   });
 }
 
@@ -250,14 +282,14 @@ function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
   pieces.forEach(p=>{
-    ctx.fillStyle=p.color;
+    ctx.fillStyle=p.c;
     ctx.fillRect(p.x,p.y,p.r,p.r);
 
     p.y += p.d;
 
-    if(p.y > canvas.height){
-      p.y = -10;
-      p.x = Math.random()*canvas.width;
+    if(p.y>canvas.height){
+      p.y=-10;
+      p.x=Math.random()*canvas.width;
     }
   });
 
@@ -268,7 +300,6 @@ function startConfetti(){
   draw();
 }
 
-/* resize */
 window.addEventListener("resize",()=>{
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
