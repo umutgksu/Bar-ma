@@ -1,302 +1,278 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Barıştık mı? 💙</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>💙 Private Page</title>
 
 <style>
-
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
 }
 
 body{
-height:100vh;
-overflow:hidden;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(-45deg,#74b9ff,#a29bfe,#81ecec,#6c5ce7);
-background-size:400% 400%;
-animation:bgMove 10s ease infinite;
-font-family:sans-serif;
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:white;
 }
 
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+/* LOGIN SCREEN */
+#loginScreen{
+  position:absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:15px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(10px);
+  z-index:999;
 }
 
-.container{
-text-align:center;
-z-index:10;
-position:relative;
+#loginScreen input{
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  width:200px;
+  text-align:center;
+  font-size:16px;
 }
 
-.stitch{
-width:320px;
-max-width:80vw;
-filter:drop-shadow(0 0 20px rgba(255,255,255,.5));
-transition:1s;
+#loginScreen button{
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:#22c55e;
+  color:white;
+  cursor:pointer;
 }
 
-.title{
-font-family:'Pacifico',cursive;
-font-size:55px;
-color:white;
-margin-top:20px;
-text-shadow:0 0 15px rgba(255,255,255,.7);
+/* MAIN */
+#main{
+  display:none;
+  width:100%;
+  height:100%;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+
+/* background */
+.circle{
+  position:absolute;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  background:rgba(59,130,246,0.3);
+  animation:float 8s infinite ease-in-out;
+}
+
+.circle:nth-child(1){left:10%;top:20%;}
+.circle:nth-child(2){left:70%;top:30%;animation-delay:2s;}
+.circle:nth-child(3){left:40%;top:70%;animation-delay:4s;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-40px);}
+}
+
+/* card */
+.card{
+  position:relative;
+  z-index:10;
+  width:90%;
+  max-width:420px;
+  padding:25px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(10px);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:15px;
+}
+
+.card img{
+  width:140px;
+  animation:bounce 2s infinite;
+}
+
+@keyframes bounce{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-15px);}
 }
 
 .buttons{
-margin-top:30px;
+  display:flex;
+  gap:15px;
+  width:100%;
+  justify-content:center;
 }
 
 button{
-border:none;
-padding:16px 35px;
-font-size:22px;
-border-radius:50px;
-cursor:pointer;
-transition:.3s;
-font-weight:bold;
+  padding:12px 20px;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:15px;
 }
 
-#yes{
-background:#2ecc71;
-color:white;
+#yes{background:#22c55e;color:white;}
+#no{background:#ef4444;color:white;}
+
+button:hover{transform:scale(1.05);}
+
+#musicBtn{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:#3b82f6;
+  color:white;
+  z-index:20;
 }
 
-#yes:hover{
-transform:scale(1.1);
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
 }
 
-#no{
-background:#ff4757;
-color:white;
-position:absolute;
+/* mobile */
+@media(max-width:600px){
+  .buttons{flex-direction:column;}
 }
-
-.jump{
-animation:jump .8s infinite;
-}
-
-@keyframes jump{
-0%{transform:translateY(0) rotate(0deg);}
-50%{transform:translateY(-30px) rotate(10deg);}
-100%{transform:translateY(0) rotate(0deg);}
-}
-
-.success{
-margin-top:20px;
-font-size:55px;
-color:white;
-font-weight:bold;
-animation:pulse 1s infinite;
-text-shadow:0 0 20px white;
-}
-
-@keyframes pulse{
-50%{
-transform:scale(1.1);
-}
-}
-
-.confetti{
-position:absolute;
-width:12px;
-height:12px;
-border-radius:3px;
-animation:confettiFall 5s linear forwards;
-}
-
-@keyframes confettiFall{
-from{
-transform:translateY(-100px) rotate(0deg);
-opacity:1;
-}
-to{
-transform:translateY(120vh) rotate(1080deg);
-opacity:0;
-}
-}
-
-.heart{
-position:absolute;
-pointer-events:none;
-animation:heartFly 6s linear forwards;
-}
-
-@keyframes heartFly{
-from{
-transform:translateY(0);
-opacity:1;
-}
-to{
-transform:translateY(-120vh);
-opacity:0;
-}
-}
-
 </style>
 </head>
 
 <body>
 
-<audio autoplay loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<div class="container">
-
-<img src="stitch.png" class="stitch" id="stitch">
-
-<div class="title" id="title">
-Barıştık mı? 💙
+<!-- LOGIN -->
+<div id="loginScreen">
+  <h2>🔐 Giriş Yap</h2>
+  <p>Devam etmek için şifreyi gir</p>
+  <input type="password" id="pass" placeholder="Şifre">
+  <button onclick="checkPass()">Giriş</button>
+  <p id="error" style="color:red;"></p>
 </div>
 
-<div class="buttons">
-<button id="yes">Evet 💙</button>
-<button id="no">Hayır 😅</button>
+<!-- MAIN -->
+<div id="main">
+
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+
+<canvas id="confetti"></canvas>
+
+<button id="musicBtn">🎵 Müziği Başlat</button>
+
+<div class="card">
+  <img src="stitch.png" alt="stitch">
+  <h2>Sana bir şey söylemek istiyorum 💙</h2>
+  <p>Bunu kabul eder misin?</p>
+
+  <div class="buttons">
+    <button id="yes">Evet 💙</button>
+    <button id="no">Hayır</button>
+  </div>
 </div>
 
-<div id="result"></div>
+<audio id="music" src="music.mp3"></audio>
 
 </div>
 
 <script>
 
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
+/* LOGIN CHECK */
+function checkPass(){
+  const val = document.getElementById("pass").value;
 
-let scale = 1;
-
-const messages = [
-"Hayır mı? 😢",
-"Emin misin? 🥺",
-"Bir daha düşün 💙",
-"Stitch üzülüyor 😭",
-"Bak evet daha güzel 😅",
-"Kaçamazsın 😎",
-"Son kararın mı? 😔"
-];
-
-let index = 0;
-
-function moveButton(){
-
-document.getElementById("title").innerHTML =
-messages[index % messages.length];
-
-index++;
-
-scale += 0.15;
-
-yesBtn.style.transform =
-`scale(${scale})`;
-
-const x =
-Math.random()*(window.innerWidth-120);
-
-const y =
-Math.random()*(window.innerHeight-80);
-
-noBtn.style.left = x+"px";
-noBtn.style.top = y+"px";
+  if(val === "1907"){
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("main").style.display="flex";
+  }else{
+    document.getElementById("error").innerText="❌ Hatalı şifre";
+  }
 }
 
-noBtn.addEventListener("mouseover",moveButton);
-noBtn.addEventListener("click",moveButton);
+/* MUSIC */
+const music = document.getElementById("music");
+document.getElementById("musicBtn").onclick = () => {
+  music.play();
+};
 
-yesBtn.addEventListener("click",()=>{
+/* YES */
+document.getElementById("yes").onclick = () => {
+  music.play();
+  startConfetti();
+  alert("💙 Harika!");
+};
 
-document.getElementById("stitch")
-.classList.add("jump");
+/* NO */
+document.getElementById("no").onclick = () => {
+  alert("😢 tekrar düşün");
+};
 
-document.getElementById("title")
-.innerHTML="Seni Çok Seviyorum 💙";
+/* CONFETTI */
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
 
-document.getElementById("result")
-.innerHTML=
-'<div class="success">Yaşasın! 🎉</div>';
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-for(let i=0;i<350;i++){
+let pieces = [];
 
-const c=document.createElement("div");
-
-c.className="confetti";
-
-c.style.left=Math.random()*100+"vw";
-c.style.top=Math.random()*100+"vh";
-
-c.style.background=
-`hsl(${Math.random()*360},100%,50%)`;
-
-document.body.appendChild(c);
-
-setTimeout(()=>{
-c.remove();
-},5000);
-
+for(let i=0;i<180;i++){
+  pieces.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height,
+    r: Math.random()*6+2,
+    d: Math.random()*5+2,
+    color:`hsl(${Math.random()*360},100%,50%)`
+  });
 }
 
-for(let i=0;i<150;i++){
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-const heart=document.createElement("div");
+  pieces.forEach(p=>{
+    ctx.fillStyle=p.color;
+    ctx.fillRect(p.x,p.y,p.r,p.r);
 
-heart.className="heart";
-heart.innerHTML="💙";
+    p.y += p.d;
 
-heart.style.left=
-Math.random()*100+"vw";
+    if(p.y > canvas.height){
+      p.y = -10;
+      p.x = Math.random()*canvas.width;
+    }
+  });
 
-heart.style.top=
-Math.random()*100+"vh";
-
-heart.style.fontSize=
-(15+Math.random()*40)+"px";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-heart.remove();
-},6000);
-
+  requestAnimationFrame(draw);
 }
 
+function startConfetti(){
+  draw();
+}
+
+/* resize */
+window.addEventListener("resize",()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 });
-
-setInterval(()=>{
-
-const heart=document.createElement("div");
-
-heart.className="heart";
-
-heart.innerHTML=
-Math.random()>0.5 ? "💙" : "✨";
-
-heart.style.left=
-Math.random()*100+"vw";
-
-heart.style.bottom="-20px";
-
-heart.style.fontSize=
-(20+Math.random()*25)+"px";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-heart.remove();
-},6000);
-
-},350);
 
 </script>
 
