@@ -3,112 +3,169 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barıştık mı?</title>
+
+<title>Barıştık mı? 💙</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
 body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#74b9ff,#a29bfe);
-    overflow:hidden;
-    font-family:sans-serif;
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(-45deg,#74b9ff,#a29bfe,#81ecec,#6c5ce7);
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+font-family:sans-serif;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 .container{
-    text-align:center;
+text-align:center;
+z-index:10;
+position:relative;
 }
 
 .stitch{
-    width:300px;
-    transition:1s;
+width:320px;
+max-width:80vw;
+filter:drop-shadow(0 0 20px rgba(255,255,255,.5));
+transition:1s;
 }
 
 .title{
-    font-family:'Pacifico',cursive;
-    font-size:50px;
-    color:white;
-    margin:20px 0;
+font-family:'Pacifico',cursive;
+font-size:55px;
+color:white;
+margin-top:20px;
+text-shadow:0 0 15px rgba(255,255,255,.7);
+}
+
+.buttons{
+margin-top:30px;
 }
 
 button{
-    padding:15px 35px;
-    border:none;
-    border-radius:50px;
-    font-size:22px;
-    cursor:pointer;
-    margin:10px;
-    transition:0.3s;
+border:none;
+padding:16px 35px;
+font-size:22px;
+border-radius:50px;
+cursor:pointer;
+transition:.3s;
+font-weight:bold;
 }
 
 #yes{
-    background:#2ecc71;
-    color:white;
+background:#2ecc71;
+color:white;
+}
+
+#yes:hover{
+transform:scale(1.1);
 }
 
 #no{
-    background:#e74c3c;
-    color:white;
-    position:absolute;
+background:#ff4757;
+color:white;
+position:absolute;
 }
 
 .jump{
-    animation:jump 1s infinite;
+animation:jump .8s infinite;
 }
 
 @keyframes jump{
-    0%{transform:translateY(0) rotate(0);}
-    50%{transform:translateY(-40px) rotate(15deg);}
-    100%{transform:translateY(0) rotate(0);}
-}
-
-.confetti{
-    position:absolute;
-    width:12px;
-    height:12px;
-    animation:fall 4s linear forwards;
-}
-
-@keyframes fall{
-    from{
-        transform:translateY(-100px) rotate(0);
-    }
-    to{
-        transform:translateY(100vh) rotate(720deg);
-    }
+0%{transform:translateY(0) rotate(0deg);}
+50%{transform:translateY(-30px) rotate(10deg);}
+100%{transform:translateY(0) rotate(0deg);}
 }
 
 .success{
-    color:white;
-    font-size:60px;
-    margin-top:20px;
-    animation:pulse 1s infinite;
+margin-top:20px;
+font-size:55px;
+color:white;
+font-weight:bold;
+animation:pulse 1s infinite;
+text-shadow:0 0 20px white;
 }
 
 @keyframes pulse{
-    50%{transform:scale(1.1);}
+50%{
+transform:scale(1.1);
 }
+}
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+border-radius:3px;
+animation:confettiFall 5s linear forwards;
+}
+
+@keyframes confettiFall{
+from{
+transform:translateY(-100px) rotate(0deg);
+opacity:1;
+}
+to{
+transform:translateY(120vh) rotate(1080deg);
+opacity:0;
+}
+}
+
+.heart{
+position:absolute;
+pointer-events:none;
+animation:heartFly 6s linear forwards;
+}
+
+@keyframes heartFly{
+from{
+transform:translateY(0);
+opacity:1;
+}
+to{
+transform:translateY(-120vh);
+opacity:0;
+}
+}
+
 </style>
 </head>
 
 <body>
 
+<audio autoplay loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
 <div class="container">
 
-<img
-class="stitch"
-id="stitch"
-src="stitch.png"
-alt="Stitch">
+<img src="stitch.png" class="stitch" id="stitch">
 
-<div class="title">Barıştık mı? 💙</div>
+<div class="title" id="title">
+Barıştık mı? 💙
+</div>
 
-<button id="yes">Evet</button>
-<button id="no">Hayır</button>
+<div class="buttons">
+<button id="yes">Evet 💙</button>
+<button id="no">Hayır 😅</button>
+</div>
 
 <div id="result"></div>
 
@@ -117,33 +174,67 @@ alt="Stitch">
 <script>
 
 const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
 
-noBtn.addEventListener("mouseover", moveButton);
-noBtn.addEventListener("click", moveButton);
+let scale = 1;
+
+const messages = [
+"Hayır mı? 😢",
+"Emin misin? 🥺",
+"Bir daha düşün 💙",
+"Stitch üzülüyor 😭",
+"Bak evet daha güzel 😅",
+"Kaçamazsın 😎",
+"Son kararın mı? 😔"
+];
+
+let index = 0;
 
 function moveButton(){
 
-const x = Math.random() * (window.innerWidth - 120);
-const y = Math.random() * (window.innerHeight - 60);
+document.getElementById("title").innerHTML =
+messages[index % messages.length];
 
-noBtn.style.left = x + "px";
-noBtn.style.top = y + "px";
+index++;
+
+scale += 0.15;
+
+yesBtn.style.transform =
+`scale(${scale})`;
+
+const x =
+Math.random()*(window.innerWidth-120);
+
+const y =
+Math.random()*(window.innerHeight-80);
+
+noBtn.style.left = x+"px";
+noBtn.style.top = y+"px";
 }
 
-document.getElementById("yes").onclick = () => {
+noBtn.addEventListener("mouseover",moveButton);
+noBtn.addEventListener("click",moveButton);
 
-document.getElementById("stitch").classList.add("jump");
+yesBtn.addEventListener("click",()=>{
 
-document.getElementById("result").innerHTML =
-'<div class="success">Yaşasın! 🎉💙</div>';
+document.getElementById("stitch")
+.classList.add("jump");
 
-for(let i=0;i<150;i++){
+document.getElementById("title")
+.innerHTML="Seni Çok Seviyorum 💙";
 
-const c = document.createElement("div");
+document.getElementById("result")
+.innerHTML=
+'<div class="success">Yaşasın! 🎉</div>';
+
+for(let i=0;i<350;i++){
+
+const c=document.createElement("div");
 
 c.className="confetti";
 
 c.style.left=Math.random()*100+"vw";
+c.style.top=Math.random()*100+"vh";
 
 c.style.background=
 `hsl(${Math.random()*360},100%,50%)`;
@@ -152,10 +243,61 @@ document.body.appendChild(c);
 
 setTimeout(()=>{
 c.remove();
-},4000);
-}
+},5000);
 
 }
+
+for(let i=0;i<150;i++){
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+heart.innerHTML="💙";
+
+heart.style.left=
+Math.random()*100+"vw";
+
+heart.style.top=
+Math.random()*100+"vh";
+
+heart.style.fontSize=
+(15+Math.random()*40)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+}
+
+});
+
+setInterval(()=>{
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.innerHTML=
+Math.random()>0.5 ? "💙" : "✨";
+
+heart.style.left=
+Math.random()*100+"vw";
+
+heart.style.bottom="-20px";
+
+heart.style.fontSize=
+(20+Math.random()*25)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+},350);
+
 </script>
 
 </body>
